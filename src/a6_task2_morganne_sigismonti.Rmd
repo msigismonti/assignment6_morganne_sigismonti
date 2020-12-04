@@ -36,28 +36,48 @@ conservation_env_pol <- read_csv(here("data", "conservation_survey.csv")) %>%
 ```
 
 ```{r, include=FALSE}
-# Made a contingency table comparing political party and environmentalist identity choice including counts and percentages
+# Made a table comparing political party and environmentalist identity choice including counts and percentages
 survey_results <- conservation_env_pol %>%
   tabyl(cons_lib,environmentalist) %>%
   adorn_percentages() %>%
   janitor::adorn_pct_formatting(digits = 2) %>%
   adorn_ns() %>% 
-  relocate("cons_lib", "Yes", "No", "Unsure")
+ relocate("cons_lib", "Yes", "No", "Unsure")
   
 
 ```
 
+
+**Table 1.** Descriptive statistics (mean, standard deviation, and sample size) for weights of female and male juvenile snowshoe hares. Data: Kielland et al. (2017)
 ```{r}
 survey_results %>%
    kable(col.names = c("", "Yes", "No", "Unsure")) %>% 
   kable_styling(bootstrap_options = "striped", full_width = FALSE)
   
 ```
+## Make contingency table and run chi-square
+
+First, we see that the site is its own variable - when we run chi-square, we really only want the counts in the table. 
+
+We can use `column_to_rownames` to convert entries in a column to stored rownames: 
+
+```{r}
+# Made a contingency table with just the counts of environmentalist idenitity choice with political party choice
+survey_cont_table <- conservation_env_pol %>%
+  tabyl(cons_lib,environmentalist) %>% 
+  column_to_rownames(var = "cons_lib") %>%
+  relocate("Yes", "No", "Unsure")
 
 
+```
 
 
+```{r}
+#performed a chi-square test for independence to answer: is there an association between political affiliation (conservative or liberal-leaning) and if a person considers theirself an environmentalist? 
 
+survey_results_x2 <- chisq.test(survey_cont_table)
+survey_results_x2
 
-
+survey_results_tidy <- tidy(survey_results_x2)
+```
 
