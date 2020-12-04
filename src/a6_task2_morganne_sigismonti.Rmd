@@ -1,0 +1,63 @@
+---
+title: "a6_task2_morganne_sigismonti"
+author: "Morganne Sigismonti"
+date: "12/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(GGally)
+library(stargazer)
+library(here)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(here)
+library(kableExtra)
+```
+
+
+```{r, include=FALSE}
+# Read the data in, cleaned it up, and made a table with political party choice and environmentalist identity choice
+conservation_env_pol <- read_csv(here("data", "conservation_survey.csv")) %>%
+  clean_names() %>% 
+  select(env_id, pol_or) %>% #only include these columns from the data
+  mutate(cons_lib = case_when( #add a new column that bins political party
+    pol_or %in% c(1,2,3) ~ "Conservative", 
+    pol_or %in% c(5,6,7) ~ "Liberal")) %>%
+      filter(!is.na(cons_lib)) %>% #exclude other data
+  mutate(environmentalist = case_when( #add a new column that bins responses about if a person is an environmentalist
+    env_id == "1" ~ "Yes",
+     env_id == "2" ~ "No",
+     env_id == "3" ~ "Unsure"))
+
+```
+
+```{r, include=FALSE}
+# Made a contingency table comparing political party and environmentalist identity choice including counts and percentages
+survey_results <- conservation_env_pol %>%
+  tabyl(cons_lib,environmentalist) %>%
+  adorn_percentages() %>%
+  janitor::adorn_pct_formatting(digits = 2) %>%
+  adorn_ns() %>% 
+  relocate("cons_lib", "Yes", "No", "Unsure")
+  
+
+```
+
+```{r}
+survey_results %>%
+   kable(col.names = c("", "Yes", "No", "Unsure")) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+  
+```
+
+
+
+
+
+
+
+
