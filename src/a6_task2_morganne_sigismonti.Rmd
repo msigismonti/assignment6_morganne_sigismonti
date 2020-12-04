@@ -1,12 +1,6 @@
----
-title: "a6_task2_morganne_sigismonti"
-author: "Morganne Sigismonti"
-date: "12/3/2020"
-output: html_document
----
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(GGally)
 library(stargazer)
@@ -16,11 +10,19 @@ library(lubridate)
 library(janitor)
 library(here)
 library(kableExtra)
+library(broom)
 ```
+
+# An Anaysis of Association of Political Affiliation with Environmental Identity
+### By Morganne Sigismonti
+
+## Introduction
+
+The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated. 
 
 
 ```{r, include=FALSE}
-# Read the data in, cleaned it up, and made a table with political party choice and environmentalist identity choice
+# Read the data in, cleaned it up, and made a table with political party choice and environmental identity choice
 conservation_env_pol <- read_csv(here("data", "conservation_survey.csv")) %>%
   clean_names() %>% 
   select(env_id, pol_or) %>% #only include these columns from the data
@@ -36,7 +38,7 @@ conservation_env_pol <- read_csv(here("data", "conservation_survey.csv")) %>%
 ```
 
 ```{r, include=FALSE}
-# Made a table comparing political party and environmentalist identity choice including counts and percentages
+# Made a table comparing political party and environmental identity choice including counts and percentages
 survey_results <- conservation_env_pol %>%
   tabyl(cons_lib,environmentalist) %>%
   adorn_percentages() %>%
@@ -48,18 +50,13 @@ survey_results <- conservation_env_pol %>%
 ```
 
 
-**Table 1.** Descriptive statistics (mean, standard deviation, and sample size) for weights of female and male juvenile snowshoe hares. Data: Kielland et al. (2017)
+**Table 1.** Counts and proportions of Political Affiliation (Conservative or Liberal) and Environmentalist Identity (Yes, No, or Unsure) Data: Batavia et al. (2019)
 ```{r}
 survey_results %>%
    kable(col.names = c("", "Yes", "No", "Unsure")) %>% 
   kable_styling(bootstrap_options = "striped", full_width = FALSE)
   
 ```
-## Make contingency table and run chi-square
-
-First, we see that the site is its own variable - when we run chi-square, we really only want the counts in the table. 
-
-We can use `column_to_rownames` to convert entries in a column to stored rownames: 
 
 ```{r}
 # Made a contingency table with just the counts of environmentalist idenitity choice with political party choice
@@ -71,13 +68,19 @@ survey_cont_table <- conservation_env_pol %>%
 
 ```
 
-
-```{r}
-#performed a chi-square test for independence to answer: is there an association between political affiliation (conservative or liberal-leaning) and if a person considers theirself an environmentalist? 
+```{r, include = FALSE}
+# Performed a chi-square test for independence to answer: is there an association between political affiliation (conservative or liberal-leaning) and if a person considers themselves an environmentalist? 
 
 survey_results_x2 <- chisq.test(survey_cont_table)
 survey_results_x2
 
 survey_results_tidy <- tidy(survey_results_x2)
+
 ```
+## Results and Takeaways
+There is a significant association between political affiliation and if a person considers themselves an environmentalist ($\chi$^2^(`r survey_results_tidy$parameter`) = `r round(survey_results_tidy$statistic,2)`, *p* = `r format(survey_results_tidy$p.value, scientific = TRUE, digits = 3)`. We have significant evidence to reject the null hypothesis of independence. This mean that we retain the alternative hypothesis that political affiliation and environmentalist identity are not independent. This can be seen in the contingency table, where 53.73% (281 people) of Liberal identifying respondents identified as environmentalists and only 33.65% (213) of Conservative identifying respondents identified as environmentalists.This shows that this data overall shows 
+
+
+## Citation
+Andrews Forest LTER Site and C. Batavia. 2019. Influences on charitable giving for conservation: Online survey data of 1,331 respondents across the US, August 2017 ver 3. Environmental Data Initiative. 
 
