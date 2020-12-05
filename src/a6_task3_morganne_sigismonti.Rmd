@@ -1,0 +1,93 @@
+---
+title: "a6_task3_morganne_sigismonti"
+author: "Morganne Sigismonti"
+date: "12/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(GGally)
+library(stargazer)
+library(here)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(here)
+library(kableExtra)
+library(broom)
+library(ggbeeswarm)
+```
+
+For Task 3, you are asked to compare total lengths (variable = total_length, in millimeters) for female lizards (sex == “F”) of two species (variable spp): CNUN (Cnemidophorus uniparens, the Desert Grassland lizard) and CNTE (Cnemidophorus tessalatus, the Colorado Checkered lizard).
+
+
+```{r, include = FALSE}
+# Create and store a simplified version of the data frame that only includes variables spp, sex, and total_length
+# Then, filtered to only include observations for female lizards of species CNUN and CNTE
+
+lizards_data <- read_csv(here("data", "lizards.csv")) %>%
+  clean_names() %>% 
+  select(spp, sex, total_length) %>% 
+  filter(spp %in% c("CNUN","CNTE")) %>% 
+  filter(sex == "F") %>% 
+  filter(!is.na(sex)) %>% 
+  filter(!is.na(total_length))
+```
+
+```{r}
+# make a beeswarm plot with box plot, mean, and median of female lizard lengths for each species (CNUN and CNTE)
+
+
+ggplot(data = lizards_data, aes(x = spp, y = total_length)) +
+  geom_beeswarm(aes(color = spp, fill = spp)) +
+  geom_boxplot(fill = NA, width = 0.2, outlier.color = NA) +
+  stat_summary(fun=mean, 
+               geom="point",
+               shape=20, 
+               size=4, 
+               color="black", 
+               fill="black") +
+  theme_classic() +
+  labs(title = "Desert Grassland and Colorado Checkered Female Lizard Lengths (SIGISMONTI)\n",
+       x = "\nSpecies",
+       y = "Total Length (mm)") +
+   scale_color_discrete()
+
+
+```
+### Figure Caption
+**Figure 1.**
+
+Prepare a finalized summary table that contains the mean and standard deviation for total length, and sample size, for each group (female CNUN and CNTE lizards)
+
+# WHAT ABOUT NA VALUES???
+
+
+**Table 1.** Mean, standard deviation, and sample size for each species, CNTE (Colorado Checkered lizard) and CNUN (Desert Grassland lizard).
+```{r}
+## make a table 
+lizards_stats <- lizards_data %>%
+ group_by("Species" = spp) %>% 
+  summarize("Mean" = mean(total_length),
+            "Standard Deviation" = sd(total_length),
+            "Sample Size" = n())
+
+
+kbl(lizards_stats)%>%
+ kable_styling(bootstrap_options = "striped", full_width = FALSE)
+```
+```{r}
+# Exploratory Analysis
+
+## histogram/qq plot
+## decide on parametric/nonparametric test to run - see notes to decide which to choose 
+## get cohens d
+### write a thing about it
+```
+
+
+## Analysis
+
+Is there a significant difference in total length difference in mean total length between female lizards for the two species?
