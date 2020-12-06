@@ -49,6 +49,7 @@ survey_results <- conservation_env_pol %>%
 
 ```
 
+## Data Analyis
 
 **Table 1.** Counts and proportions of Political Affiliation (Conservative or Liberal) and Environmentalist Identity (Yes, No, or Unsure) Data: Batavia et al. (2019)
 ```{r}
@@ -77,7 +78,7 @@ survey_results_x2
 survey_results_tidy <- tidy(survey_results_x2)
 
 ```
-## Results and Takeaways
+
 There is a significant association between political affiliation and if a person considers themselves an environmentalist ($\chi$^2^(`r survey_results_tidy$parameter`) = `r round(survey_results_tidy$statistic,2)`, *p* = `r format(survey_results_tidy$p.value, scientific = TRUE, digits = 3)`. We have significant evidence to reject the null hypothesis of independence. This mean that we retain the alternative hypothesis that political affiliation and environmentalist identity are not independent. This can be seen in the contingency table, where 53.73% (281 people) of Liberal identifying respondents identified as environmentalists and only 33.65% (213) of Conservative identifying respondents identified as environmentalists.This shows that this data overall shows 
 
 
