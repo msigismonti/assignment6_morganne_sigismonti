@@ -18,12 +18,9 @@ library(effsize)
 ### By Morganne Sigismonti
 
 ## Introduction
-The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have truly different average lengths. 
+The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. (Lightfoot (2017)) I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have truly different average lengths.
 
-
-Add a 2 - 3 sentence mini-introduction describing the data, the question you’re answering, and the method you’ll use
-The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated. Data: Batavia et al. (2019)
-
+## Data and Analysis
 ```{r, include = FALSE}
 # Create and store a simplified version of the data frame that only includes variables spp, sex, and total_length
 # Then, filtered to only include observations for female lizards of species CNUN and CNTE
@@ -63,6 +60,8 @@ ggplot(data = lizards_plot, aes(x = Species, y = total_length)) +
 ```
 
 **Figure 1.** Lengths (mm) for Lizards of two species, Desert Grassland and Colorado Checkered Lizards. Pink points indicate individual observations for length (mm) of a female lizard. Box endpoints indicate the 25^th^ and 75^th^ percentile values; the black line and black point within the box indicate the median and mean value for each sex in each locale, respectively. Data: Lightfoot (2017)
+
+
 
 
 
@@ -140,7 +139,6 @@ lizards_effsize <- cohen.d(cc_flizards, dg_flizards, na.rm=TRUE)
 
 ```
 
-## Analysis
 
 On average, Colorado Checkered female lizards have a larger total length than Desert Grassland female lizards (`r round(cc_mean, 2)` $\pm$ `r round(cc_sd, 2)` and `r round(dg_mean, 2)` $\pm$ `r round(dg_sd, 2)` mm, respectively; mean $\pm$ 1 standard deviation). While the absolute difference in means is `r round(cc_mean, 2) - round(dg_mean, 2)` mm (a `r round((cc_mean - dg_mean)/(cc_mean + dg_mean/2)*100, 2)` % difference), the difference in means is significant (Welch's two-sample t-test: t(`r round(lizards_ttest_tidy$parameter, 2)`) = `r round(lizards_ttest_tidy$statistic, 2)`, p < 0.05) and the effect size is large (Cohen's *d* = `r round(lizards_effsize$estimate, 2)`). Data: Lightfoot (2017)
 
