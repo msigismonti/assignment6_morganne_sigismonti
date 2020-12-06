@@ -18,7 +18,7 @@ library(broom)
 
 ## Introduction
 
-The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated. 
+The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. (Batavia et al. (2019)) In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated.
 
 
 ```{r, include=FALSE}

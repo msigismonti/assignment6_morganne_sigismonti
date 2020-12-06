@@ -20,7 +20,7 @@ library(effsize)
 ## Introduction
 The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. (Lightfoot (2017)) I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have truly different average lengths.
 
-## Data and Analysis
+## Data Analysis
 ```{r, include = FALSE}
 # Create and store a simplified version of the data frame that only includes variables spp, sex, and total_length
 # Then, filtered to only include observations for female lizards of species CNUN and CNTE
