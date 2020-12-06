@@ -1,9 +1,3 @@
----
-title: "a6_task3_morganne_sigismonti"
-author: "Morganne Sigismonti"
-date: "12/4/2020"
-output: html_document
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -18,10 +12,17 @@ library(here)
 library(kableExtra)
 library(broom)
 library(ggbeeswarm)
+library(effsize)
 ```
+# Comparing the Total Lengths of Two Species of Female Lizards
+### By Morganne Sigismonti
 
-For Task 3, you are asked to compare total lengths (variable = total_length, in millimeters) for female lizards (sex == “F”) of two species (variable spp): CNUN (Cnemidophorus uniparens, the Desert Grassland lizard) and CNTE (Cnemidophorus tessalatus, the Colorado Checkered lizard).
+## Introduction
+The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have truly different average lengths. 
 
+
+Add a 2 - 3 sentence mini-introduction describing the data, the question you’re answering, and the method you’ll use
+The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated. Data: Batavia et al. (2019)
 
 ```{r, include = FALSE}
 # Create and store a simplified version of the data frame that only includes variables spp, sex, and total_length
@@ -32,16 +33,18 @@ lizards_data <- read_csv(here("data", "lizards.csv")) %>%
   select(spp, sex, total_length) %>% 
   filter(spp %in% c("CNUN","CNTE")) %>% 
   filter(sex == "F") %>% 
-  filter(!is.na(sex)) %>% 
-  filter(!is.na(total_length))
+  filter(!is.na(sex))
 ```
 
 ```{r}
 # make a beeswarm plot with box plot, mean, and median of female lizard lengths for each species (CNUN and CNTE)
 
+lizards_plot <- lizards_data %>%
+  mutate(spp = recode(spp, "CNTE" = "Colorado Checkered", "CNUN" = "Desert Grassland")) %>%
+  rename("Species" = spp)
 
-ggplot(data = lizards_data, aes(x = spp, y = total_length)) +
-  geom_beeswarm(aes(color = spp, fill = spp)) +
+ggplot(data = lizards_plot, aes(x = Species, y = total_length)) +
+  geom_beeswarm(aes(color = "pink")) +
   geom_boxplot(fill = NA, width = 0.2, outlier.color = NA) +
   stat_summary(fun=mean, 
                geom="point",
@@ -53,41 +56,94 @@ ggplot(data = lizards_data, aes(x = spp, y = total_length)) +
   labs(title = "Desert Grassland and Colorado Checkered Female Lizard Lengths (SIGISMONTI)\n",
        x = "\nSpecies",
        y = "Total Length (mm)") +
-   scale_color_discrete()
+  theme(plot.title = element_text(size=10)) +
+  theme(legend.position = "none")
 
 
 ```
-### Figure Caption
-**Figure 1.**
 
-Prepare a finalized summary table that contains the mean and standard deviation for total length, and sample size, for each group (female CNUN and CNTE lizards)
-
-# WHAT ABOUT NA VALUES???
+**Figure 1.** Lengths (mm) for Lizards of two species, Desert Grassland and Colorado Checkered Lizards. Pink points indicate individual observations for length (mm) of a female lizard. Box endpoints indicate the 25^th^ and 75^th^ percentile values; the black line and black point within the box indicate the median and mean value for each sex in each locale, respectively. Data: Lightfoot (2017)
 
 
-**Table 1.** Mean, standard deviation, and sample size for each species, CNTE (Colorado Checkered lizard) and CNUN (Desert Grassland lizard).
+
+**Table 1.** Mean, standard deviation, and sample size for each female collected of each lizard species, Colorado Checkered lizard and Desert Grassland lizard. Data: Lightfoot (2017)
 ```{r}
-## make a table 
+## made a summary table of the mean, sd, and sample size for each species females
 lizards_stats <- lizards_data %>%
  group_by("Species" = spp) %>% 
-  summarize("Mean" = mean(total_length),
-            "Standard Deviation" = sd(total_length),
-            "Sample Size" = n())
+  summarize("Mean" = round(mean(total_length, na.rm=TRUE), 2), 
+            "Standard Deviation" = round(sd(total_length, na.rm=TRUE), 2),
+            "Sample Size" = n()) %>%
+  mutate(Species = recode(Species, "CNTE" = "Colorado Checkered", "CNUN" = "Desert Grassland")) # changed the abbreviated names to their common names
 
 
 kbl(lizards_stats)%>%
- kable_styling(bootstrap_options = "striped", full_width = FALSE)
-```
-```{r}
-# Exploratory Analysis
-
-## histogram/qq plot
-## decide on parametric/nonparametric test to run - see notes to decide which to choose 
-## get cohens d
-### write a thing about it
+ kable_styling(bootstrap_options = "striped", full_width = FALSE) # made the table look goo
 ```
 
+
+```{r, include = FALSE}
+# Conducted exploratory analysis with histograms and QQ plots to see if the data looks normally distributed before conducting any hypothesis test, such as a T-test
+
+# plot histograms and qqplots to check assumptions
+
+# Histogram
+ggplot(data = lizards_data, aes(x = total_length)) +
+  geom_histogram(bins = 12) +
+  facet_wrap(~spp)
+# females: relatively normal
+# males: possibly some negative skew
+
+# QQ Plot
+ggplot(data= lizards_data, aes(sample = total_length)) +
+  geom_qq() +
+  facet_wrap(~spp)
+# females: very linear
+# males: relatively linear with outliers at tail ends
+
+# Prepping for MWU and T-test code:
+
+# Pull vectors of lengths for both species of female lizards
+cc_flizards <- lizards_data %>% 
+  filter(spp == "CNTE") %>% 
+  pull(total_length)
+  
+dg_flizards <- lizards_data %>% 
+  filter(spp == "CNUN") %>% 
+  pull(total_length)
+
+# Double check if data is normal by running non parametric test
+lizards_lengths_mwu <- wilcox.test(cc_flizards, dg_flizards)
+
+# Overall: My assumption that the data is normally distributed holds true. The histograms and QQ plots seem to be mostly normal, with slightly positive skew in the desert grassland (CNUN) sample. I ran a non parametric Mann-Whitney U to answer to see if there was a significant difference in the ranks (median) between cc_flizards and dg_flizards. My p-value of 3.64e-10 is less than the significance value of 0.05. This means that if the null hypothesis is true (that these samples were drawn from populations with the same median), there is a probability of 3.64e-10 that I could have found median values at least as different as these by chance. There is not sufficient evidence to reject the null hypothesis of equal ranks (or medians). This means that I can use the Two-sample t-test to compare my data!
+```
+
+
+```{r, include = FALSE}
+
+# Run the t-test:
+lizards_ttest <- t.test(cc_flizards, dg_flizards)
+
+# Get the tidy model results to call outputs in-line: 
+lizards_ttest_tidy <- tidy(lizards_ttest)
+
+# Get the means & SDs for each: 
+cc_mean <- mean(cc_flizards, na.rm=TRUE)
+dg_mean <- mean(dg_flizards, na.rm=TRUE)
+cc_sd <- sd(cc_flizards, na.rm=TRUE)
+dg_sd <- sd(dg_flizards, na.rm=TRUE)
+
+# Get the effect size: 
+lizards_effsize <- cohen.d(cc_flizards, dg_flizards, na.rm=TRUE)
+
+
+
+```
 
 ## Analysis
 
-Is there a significant difference in total length difference in mean total length between female lizards for the two species?
+On average, Colorado Checkered female lizards have a larger total length than Desert Grassland female lizards (`r round(cc_mean, 2)` $\pm$ `r round(cc_sd, 2)` and `r round(dg_mean, 2)` $\pm$ `r round(dg_sd, 2)` mm, respectively; mean $\pm$ 1 standard deviation). While the absolute difference in means is `r round(cc_mean, 2) - round(dg_mean, 2)` mm (a `r round((cc_mean - dg_mean)/(cc_mean + dg_mean/2)*100, 2)` % difference), the difference in means is significant (Welch's two-sample t-test: t(`r round(lizards_ttest_tidy$parameter, 2)`) = `r round(lizards_ttest_tidy$statistic, 2)`, p < 0.05) and the effect size is large (Cohen's *d* = `r round(lizards_effsize$estimate, 2)`). Data: Lightfoot (2017)
+
+## Citation 
+
+Lightfoot, D. 2017. Lizard pitfall trap data (LTER-II, LTER-III) ver 36. Environmental Data Initiative. https://doi.org/10.6073/pasta/ff37b4cace16a9943575f3fd7067064e
