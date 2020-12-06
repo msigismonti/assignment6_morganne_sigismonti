@@ -1,0 +1,122 @@
+---
+title: "a6_task4_morganne_sigismonti.Rmd"
+author: "Morganne Sigismonti"
+date: "12/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(GGally)
+library(stargazer)
+library(here)
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(here)
+library(kableExtra)
+library(broom)
+library(ggbeeswarm)
+library(effsize)
+
+```
+
+```{r}
+# Read in the data and cleaned up
+mono_lake_clean <- read_csv(here("data", "mono_lake_annual_levels.csv"), skip = 5) %>%
+  clean_names() %>% 
+  rename("lake_level" = lake_level_feet_above_sea_level) %>%
+  select(year, lake_level)
+  
+ 
+```
+
+```{r}
+mono_lake_clean %>%
+  ggplot(aes(x = year, y = lake_level, fill = lake_level)) +
+  geom_line(size = .8, color = "dodgerblue2", alpha = .5) +
+  geom_ribbon(aes(ymin = -Inf, ymax = lake_level),
+              fill = "dodgerblue2",
+              alpha = .3) +
+  theme_minimal() +
+  labs(title = "Mono Lake levels 1850 - 2017, (SIGISMONTI)\n",x = "\nYear", y = "Lake Level (ft above sea level)\n") +
+  coord_cartesian(xlim =c(1850, 2017), ylim = c(6330, 6450)) +
+  #1941
+  annotate(geom="text", x=1941, y= 6422,
+           label="1941", size = 2.75) +
+  annotate(geom= "point", x=1941, y= 6417, color = "black") +
+  #1979
+  annotate(geom="text", x=1979, y= 6369,
+           label="1979", size = 2.75) +
+  annotate(geom= "point", x=1979, y= 6373.40, color = "black") +
+  
+  #1984 diversion stopped Mono lake streams and lake 
+  annotate(geom="text", x=1984, y= 6386,
+           label="1984", size = 2.75) +
+  annotate(geom= "point", x=1984, y= 6380.10, color = "black") +
+  
+  #1994
+  annotate(geom="text", x=1994, y= 6370,
+           label="1994", size = 2.75) +
+  annotate(geom= "point", x=1994, y= 6374.60, color = "black") +
+  #1998
+  annotate(geom="text", x=1998, y= 6390,
+           label="1998", size = 2.75) +
+  annotate(geom= "point", x=1998, y= 6384.30, color = "black") +
+  #2013
+  annotate(geom="text", x=2013, y= 6387,
+           label="2013", size = 2.75) +
+  annotate(geom= "point", x=2013, y= 6380.60, color = "black") +
+  geom_hline(yintercept=6377, color = "green4") +
+  geom_hline(yintercept=6360, color = "red") +
+  geom_hline(yintercept=6350, color = "black")
+
+
+
+#+
+  #  annotate(geom="point", x=as.Date("2017-12-17"), y=20089, size=10, shape=21, fill="transparent")
+
+
+```
+
+
+
+
+
+#1941 
+In 1941, the Los Angeles Department of Water & Power (DWP) began diverting water from Mono Lake’s tributary streams, sending it 350 miles south to meet the growing water demands of Los Angeles.
+
+As a result, over the next 40 years Mono Lake dropped by 45 vertical feet, lost half its volume, and doubled in salinity. A landbridge formed to islands that had previously been a safe nesting area for thousands of California Gulls, allowing predators to reach eggs and chicks. Air quality degraded as toxic dust blew off of the dry lakebed exposed by the falling lake.
+
+
+#1979 
+In 1979, the Mono Lake Committee and the National Audubon Society sued DWP, arguing that water diversions to Los Angeles did not comply with the Public Trust doctrine.
+
+#1983 
+In a 1983 precedent-setting decision, the California Supreme Court agreed with the Mono Lake Committee, ruling that the state has an obligation to protect places such as Mono Lake, “as far as feasible,” even if this means reconsidering established water rights.
+
+#1984
+In 1984, the Committee, California Trout, and the National Audubon Society sued DWP again, this time to protect Mono Lake’s tributary streams. Because of these cases, water began flowing down the Mono Basin streams’ dry channels and into Mono Lake for the first time since the 1940s.
+
+#1994 
+Decision 1631 set a lake level of 6392 feet to protect Mono Lake’s public trust values, required permanent streamflows for Mono Basin streams, and ordered DWP to restore streams and waterfowl habitat damaged as a result of diversions. 
+
+#1998
+In 1998, the State Water Board issued two restoration orders, 98-05 and 98-07, which required DWP to implement a restoration plan for the Mono Basin’s streams and waterfowl habitat, both damaged by decades of excessive water diversions.
+To restore waterfowl habitat, Orders 98-05 and 98-07 mandated raising Mono Lake to 6392 feet and improving existing freshwater ponds for migrating birds. The orders specified stream restoration measures such as implementing streamflow patterns based on the natural hydrograph to achieve “functional and self-sustaining stream systems with healthy riparian ecosystem components” and “trout in good condition.”
+
+The orders also launched a decade-long scientific study and monitoring program to determine the optimal restoration flows for Rush Creek and Lee Vining Creek. Independent Stream Scientists appointed by the State Water Board carried out the study, holding twice-yearly restoration meetings with all interested parties, including the Mono Lake Committee.
+
+#2013
+In 2013 the Mono Basin Stream Restoration Agreement was submitted to the State Water Board, signed by all parties, and approved by the DWP Board of Commissioners. The Mono Lake Committee organized a celebration to mark the occasion, attended by DWP officials, all Agreement parties, and many dedicated Mono Lake Committee members.
+
+# The three lines
+At 6,377 feet above sea level, land bridges emerge between the mainland and islands, allowing predators (e.g. coyotes) to access major bird nesting sites
+
+From The Mono Basin Ecosystem: Effects of Changing Lake Level, published in 1987 by the Mono Basin Ecosystem Study Committee, Board on Environmental Studies and Toxicology (NRC): “The critical food resources for aquatic birds using Mono Lake are brine shrimp and brine flies. If the lake fell to levels at which the birds’ food sources were adversely affected, the bird populations would be reduced. 
+
+The decrease in availability of brine shrimp for food would begin to affect those birds relying on them – eared grebes and California gulls – at a salinity of 120 g/L (lake level of 6360 ft). The impacts would be acute at salinities above 150 g/L (6350 ft).”
+
+
+
