@@ -33,7 +33,7 @@ mono_lake_clean <- read_csv(here("data", "mono_lake_annual_levels.csv"), skip = 
 mono_lake_clean %>%
   ggplot(aes(x = year, y = lake_level, fill = lake_level)) +
   geom_line(size = .8, color = "dodgerblue2", alpha = .5) +
-  scale_x_continuous(limits = c(1850, 2018.3), # made sure I could see 2017 in the graph
+  scale_x_continuous(limits = c(1850, 2017), # made sure I could see 2017 in the graph
                      breaks = c(1850, 1875, 1900, 1925, 1950, 1975, 2000, 2017), #years I want the graph to display
                      expand = c(0, 0)) +
   geom_ribbon(aes(ymin = -Inf, ymax = lake_level),
