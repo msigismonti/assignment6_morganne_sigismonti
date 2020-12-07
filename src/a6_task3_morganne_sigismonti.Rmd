@@ -41,7 +41,7 @@ lizards_plot <- lizards_data %>%
   rename("Species" = spp)
 
 ggplot(data = lizards_plot, aes(x = Species, y = total_length)) +
-  geom_beeswarm(aes(color = "pink")) +
+  geom_beeswarm(aes(color = Species)) +
   geom_boxplot(fill = NA, width = 0.2, outlier.color = NA) +
   stat_summary(fun=mean, 
                geom="point",
