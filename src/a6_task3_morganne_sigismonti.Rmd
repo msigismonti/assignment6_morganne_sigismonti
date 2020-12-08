@@ -18,7 +18,7 @@ library(effsize)
 ### By Morganne Sigismonti
 
 ## Introduction
-The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. (Lightfoot (2017)) I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have truly different average lengths.
+The  data used in this study was collected by David Lightfoot's at the Jornada Experimental Range and Chihuahuan Desert Rangeland Research Center in the Chihuahuan Desert, New Mexico and consists of measured variables of lizard species caught in pit-fall traps. In this analysis, I will compare the total measured length of female lizards across two species, the Colorado Checkered Lizard and the Desert Grassland Lizard, to see if there is a significant different between the two specie's total measured length. (Lightfoot (2017)) I will create a plot and a summary table to show the trends in this data, as well as explore data normality, hypothesis testing with a Two Sample T-test, and use Cohen's *d* to see if the two species have significantly different average lengths.
 
 ## Data Analysis
 ```{r, include = FALSE}
@@ -77,7 +77,7 @@ lizards_stats <- lizards_data %>%
 
 
 kbl(lizards_stats)%>%
- kable_styling(bootstrap_options = "striped", full_width = FALSE) # made the table look goo
+ kable_styling(bootstrap_options = "striped", full_width = FALSE) # made the table look good!
 ```
 
 
@@ -90,15 +90,15 @@ kbl(lizards_stats)%>%
 ggplot(data = lizards_data, aes(x = total_length)) +
   geom_histogram(bins = 12) +
   facet_wrap(~spp)
-# females: relatively normal
-# males: possibly some negative skew
+# CNTE: relatively normal
+# CNUN: possibly some positive skew
 
 # QQ Plot
 ggplot(data= lizards_data, aes(sample = total_length)) +
   geom_qq() +
   facet_wrap(~spp)
-# females: very linear
-# males: relatively linear with outliers at tail ends
+# CNTE: pretty linear
+# CNUN: relatively linear with outliers at tail ends
 
 # Prepping for MWU and T-test code:
 
