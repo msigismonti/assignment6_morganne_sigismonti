@@ -18,7 +18,7 @@ library(broom)
 
 ## Introduction
 
-The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. (Batavia et al. (2019)) In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist ) and actual counts to see if these variables are independent or affiliated.
+The data used in this study was collected by Chelsea Batavia and Andrews Forest LTER from 1,331 anonymous, nationwide U.S. respondents through an online survey conducted in August, 2017. (Batavia et al. (2019)) In this analysis, I will compare responses for political affiliation (Conservative or Liberal) and self-identification as an environmentalist (Yes, No, Unsure) to attempt to find out if these two variables are associated with one-another. I will set up a contingency table and use the Chi-Squared test for independence to compare expected counts (if there was no affect of political affiliation on self-identification as an environmentalist) and actual counts to see if these variables are independent or affiliated.
 
 
 ```{r, include=FALSE}
@@ -79,7 +79,7 @@ survey_results_tidy <- tidy(survey_results_x2)
 
 ```
 
-There is a significant association between political affiliation and if a person considers themselves an environmentalist ($\chi$^2^(`r survey_results_tidy$parameter`) = `r round(survey_results_tidy$statistic,2)`, *p* = `r format(survey_results_tidy$p.value, scientific = TRUE, digits = 3)`. We have significant evidence to reject the null hypothesis of independence. This mean that we retain the alternative hypothesis that political affiliation and environmentalist identity are not independent. This can be seen in the contingency table, where 53.73% (281 people) of Liberal identifying respondents identified as environmentalists and only 33.65% (213) of Conservative identifying respondents identified as environmentalists.This shows that this data overall shows 
+There is a significant association between political affiliation and if a person considers themselves an environmentalist ($\chi$^2^(`r survey_results_tidy$parameter`) = `r round(survey_results_tidy$statistic,2)`, *p* = `r format(survey_results_tidy$p.value, scientific = TRUE, digits = 3)`. We have significant evidence to reject the null hypothesis of independence. This mean that we retain the alternative hypothesis that political affiliation and environmentalist identity are not independent. This can be seen in the contingency table where there is a trend, for example, that 53.73% (281 people) of Liberal identifying respondents identified as environmentalists and only 33.65% (213) of Conservative identifying respondents identified as environmentalists. The data overall shows more Conservatives not identifying as environmentalists and more Liberals identifying as environmentalists; however, more research and analysis should be conducted to understand the consistency of this trend.
 
 
 ## Citation
